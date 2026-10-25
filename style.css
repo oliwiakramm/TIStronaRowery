@@ -135,3 +135,70 @@ a:focus-visible {
   transform: translateY(-6px);
   box-shadow: 0 12px 24px rgba(18, 18, 31, 0.18);
 }
+
+.price-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+}
+.price-table th,
+.price-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.price-table thead th {
+  background: var(--dark);
+  color: #fff;
+}
+.num {
+  text-align: right;
+}
+.price-table th.num,
+.price-table td.num {
+  text-align: right;
+}
+
+footer {
+  max-width: none;
+  margin-top: 48px;
+  padding: 32px 24px;
+  background: var(--dark);
+  color: #fff;
+}
+footer h2 {
+  font-size: 1.5rem;
+}
+footer address {
+  font-style: normal;
+}
+footer a {
+  color: #ffb3d1;
+}
+footer a:hover {
+  color: #fff;
+}
+.copy {
+  margin: 16px 0 0;
+  color: #b8b8cc;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+  .site-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .menu {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}
