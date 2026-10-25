@@ -90,3 +90,48 @@ a:focus-visible {
 .menu a:focus-visible {
   outline-color: #ffb3d1;
 }
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.card {
+  flex: 1 1 260px;
+  padding: 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.card p {
+  margin: 0 0 12px;
+  color: var(--muted);
+}
+.card__price {
+  margin-bottom: 0;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.card--highlight {
+  border: 2px solid var(--accent);
+}
+.card__badge {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff !important;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(18, 18, 31, 0.18);
+}
