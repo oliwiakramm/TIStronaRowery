@@ -1,64 +1,36 @@
+/* ---------- Podstawy ---------- */
 :root {
   --bg: #f7f7fb;
   --text: #1c1c28;
   --muted: #55556a;
-  --accent: #3b2bd9;
+  --accent: #3b2bd9;       /* kontrast z białym > 7:1 */
   --accent-hover: #d6336c;
   --card-bg: #ffffff;
   --border: #dcdce8;
   --dark: #12121f;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    Arial,
-    sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   line-height: 1.6;
   color: var(--text);
   background: var(--bg);
 }
 
-main,
-footer {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-section {
-  padding: 48px 0 24px;
-}
-h2 {
-  font-size: 2rem;
-  margin: 0 0 24px;
-}
-h3 {
-  margin: 0 0 8px;
-}
+main, footer { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+section { padding: 48px 0 24px; }
+h2 { font-size: 2rem; margin: 0 0 24px; }
+h3 { margin: 0 0 8px; }
 
-a {
-  color: var(--accent);
-}
-a:focus-visible {
-  outline: 3px solid var(--accent-hover);
-  outline-offset: 3px;
-}
+a { color: var(--accent); }
+a:focus-visible { outline: 3px solid var(--accent-hover); outline-offset: 3px; }
 
 .visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
+  position: absolute; width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
 }
 
 /* ---------- Zadanie 2: nawigacja we flexie ---------- */
@@ -70,32 +42,24 @@ a:focus-visible {
   background: var(--dark);
 }
 .logo {
-  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   font-size: 1.5rem;
   font-weight: 800;
   color: #fff;
-}
-
-.menu {
-  display: flex;
-  gap: 24px;
-}
-.menu a {
   text-decoration: none;
-  color: #fff;
 }
-.menu a:hover {
-  color: #ffb3d1;
-}
-.menu a:focus-visible {
-  outline-color: #ffb3d1;
-}
+.logo svg { flex: none; }
+.logo:focus-visible { outline-color: #ffb3d1; }
 
-.cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-}
+.menu { display: flex; gap: 24px; }
+.menu a { text-decoration: none; color: #fff; }
+.menu a:hover { color: #ffb3d1; }
+.menu a:focus-visible { outline-color: #ffb3d1; }
+
+/* ---------- Zadanie 3: karty usług ---------- */
+.cards { display: flex; flex-wrap: wrap; gap: 24px; }
 
 .card {
   flex: 1 1 260px;
@@ -103,39 +67,29 @@ a:focus-visible {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
-.card p {
-  margin: 0 0 12px;
-  color: var(--muted);
-}
-.card__price {
-  margin-bottom: 0;
-  font-weight: 700;
-  color: var(--text);
-}
+.card p { margin: 0 0 12px; color: var(--muted); }
+.card__price { margin-bottom: 0; font-weight: 700; color: var(--text); }
 
-.card--highlight {
-  border: 2px solid var(--accent);
-}
+.card--highlight { border: 2px solid var(--accent); }
 .card__badge {
   display: inline-block;
   padding: 2px 12px;
   border-radius: 999px;
   background: var(--accent);
   color: #fff !important;
-  font-size: 0.85rem;
+  font-size: .85rem;
   font-weight: 600;
 }
 
+/* Bonus: karta unosi się o 6 px i dostaje cień */
 .card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(18, 18, 31, 0.18);
+  box-shadow: 0 12px 24px rgba(18, 18, 31, .18);
 }
 
+/* ---------- Zadanie 4: cennik ---------- */
 .price-table {
   width: 100%;
   border-collapse: collapse;
@@ -143,23 +97,13 @@ a:focus-visible {
   border: 1px solid var(--border);
 }
 .price-table th,
-.price-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border);
-  text-align: left;
-}
-.price-table thead th {
-  background: var(--dark);
-  color: #fff;
-}
-.num {
-  text-align: right;
-}
+.price-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); text-align: left; }
+.price-table thead th { background: var(--dark); color: #fff; }
+.num { text-align: right; }
 .price-table th.num,
-.price-table td.num {
-  text-align: right;
-}
+.price-table td.num { text-align: right; }
 
+/* ---------- Stopka ---------- */
 footer {
   max-width: none;
   margin-top: 48px;
@@ -167,33 +111,20 @@ footer {
   background: var(--dark);
   color: #fff;
 }
-footer h2 {
-  font-size: 1.5rem;
-}
-footer address {
-  font-style: normal;
-}
-footer a {
-  color: #ffb3d1;
-}
-footer a:hover {
-  color: #fff;
-}
-.copy {
-  margin: 16px 0 0;
-  color: #b8b8cc;
-  font-size: 0.9rem;
-}
-
+footer h2 { font-size: 1.5rem; }
+footer address { font-style: normal; }
+footer a { color: #ffb3d1; }
+footer a:hover { color: #fff; }
+.copy { margin: 16px 0 0; color: #b8b8cc; font-size: .9rem; }
 
 /* ---------- Menu na telefonie (hamburger) ---------- */
 .menu-toggle {
-  display: none;                 
+  display: none;                 /* na szerokim ekranie hamburger jest ukryty */
   position: relative;
   width: 64px;
   min-height: 56px;
   padding: 0;
-  border: 0;                     
+  border: 0;                     /* bez obramowania */
   border-radius: 0;
   background: var(--dark);
   -webkit-appearance: none;
@@ -202,7 +133,8 @@ footer a:hover {
 }
 .menu-toggle:hover { background: #2f21b8; }
 .menu-toggle:focus-visible { outline: 3px solid #ffb3d1; outline-offset: -6px; }
- 
+
+/* trzy poziome kreski ułożone bezwzględnie, więc nie zależą od flexa */
 .menu-toggle__bar {
   position: absolute;
   left: 50%;
@@ -216,29 +148,30 @@ footer a:hover {
 }
 .menu-toggle__bar:nth-child(1) { transform: translateY(-9px); }
 .menu-toggle__bar:nth-child(3) { transform: translateY(9px); }
- 
+
+/* po otwarciu: składanie w X */
 .menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(1) { transform: rotate(45deg); }
 .menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(2) { opacity: 0; }
 .menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(3) { transform: rotate(-45deg); }
- 
+
 @media (max-width: 600px) {
   .site-header {
-    flex-wrap: wrap;             
+    flex-wrap: wrap;             /* pasek: logo + hamburger, menu pod spodem */
     align-items: stretch;
     padding: 0;
   }
   .logo { align-self: center; padding: 16px 24px; }
   .menu-toggle { display: block; }
- 
+
   .menu {
     flex: 0 0 100%;
     flex-direction: column;
     gap: 0;
     background: #1f1f35;
-    max-height: 0;               
+    max-height: 0;               /* zamknięte menu */
     overflow: hidden;
     opacity: 0;
-    visibility: hidden;          
+    visibility: hidden;          /* ukryte linki nie łapią focusu z klawiatury */
     transform: translateY(-8px);
     transition: max-height .35s ease, opacity .25s ease, transform .35s ease, visibility 0s linear .35s;
   }
@@ -248,8 +181,8 @@ footer a:hover {
     border-top: 1px solid rgba(255, 255, 255, .08);
   }
   .menu a:hover { background: rgba(255, 255, 255, .08); }
- 
-  .menu.menu--open {             
+
+  .menu.menu--open {             /* menu rozsuwa się w dół */
     max-height: 240px;
     opacity: 1;
     visibility: visible;
@@ -257,11 +190,10 @@ footer a:hover {
     transition: max-height .35s ease, opacity .25s ease, transform .35s ease, visibility 0s;
   }
 }
- 
+
 @media (prefers-reduced-motion: reduce) {
   .card,
   .menu,
   .menu.menu--open,
   .menu-toggle__bar { transition: none; }
 }
- 
