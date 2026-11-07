@@ -1,0 +1,102 @@
+<?php
+$firma = 'Szprycha';
+$rok = date('Y');
+?>
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Szprycha</title>
+    <script src="app.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <p class="logo">Szprycha</p>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span class="menu-toggle__bar" aria-hidden="true"></span>
+      <span class="menu-toggle__bar" aria-hidden="true"></span>
+      <span class="menu-toggle__bar" aria-hidden="true"></span>
+    </button>
+      <nav class="menu" aria-label="Menu główne">
+        <a href="#uslugi">Usługi</a>
+        <a href="#cennik">Cennik</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+    </header>
+    <main>
+      <section id="uslugi">
+        <h2>Usługi</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>Przegląd</h3>
+            <p>Hamulce i przerzutki.</p>
+            <p class="card__price">od 120 zł</p>
+          </article>
+
+          <article class="card card--highlight">
+            <p class="card__badge">Najczęściej wybierane</p>
+            <h3>Przegląd generalny</h3>
+            <p>
+              Pełna regulacja, smarowanie, centrowanie kół i sprawdzenie ramy.
+            </p>
+            <p class="card__price">od 250 zł</p>
+          </article>
+
+          <article class="card">
+            <h3>Wymiana opon</h3>
+            <p>Demontaż, wymiana opony lub dętki i napompowanie kół.</p>
+            <p class="card__price">od 40 zł</p>
+          </article>
+        </div>
+      </section>
+      <section id="cennik">
+        <h2>Cennik</h2>
+        <table class="price-table">
+          <caption class="visually-hidden">
+            Cennik usług serwisowych
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Usługa</th>
+              <th scope="col" class="num">Cena</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Przegląd</td>
+              <td class="num">120 zł</td>
+            </tr>
+            <tr>
+              <td>Przegląd generalny</td>
+              <td class="num">250 zł</td>
+            </tr>
+            <tr>
+              <td>Wymiana opony lub dętki</td>
+              <td class="num">40 zł</td>
+            </tr>
+            <tr>
+              <td>Centrowanie koła</td>
+              <td class="num">60 zł</td>
+            </tr>
+            <tr>
+              <td>Wymiana łańcucha</td>
+              <td class="num">50 zł</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <footer id="kontakt">
+      <h2>Kontakt</h2>
+      <address>
+        ul. Gdańska 12, 85-006 Bydgoszcz<br />
+        Telefon: <a href="tel:+48500100200">500 100 200</a><br />
+        E-mail: <a href="mailto:serwis@szprycha.pl">serwis@szprycha.pl</a>
+      </address>
+      <p class="copy">&copy; <?= $rok ?> <?= $firma ?> </p>
+    </footer>
+  </body>
+</html>
