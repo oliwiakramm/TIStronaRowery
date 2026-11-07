@@ -185,20 +185,83 @@ footer a:hover {
   font-size: 0.9rem;
 }
 
+
+/* ---------- Menu na telefonie (hamburger) ---------- */
+.menu-toggle {
+  display: none;                 
+  position: relative;
+  width: 64px;
+  min-height: 56px;
+  padding: 0;
+  border: 0;                     
+  border-radius: 0;
+  background: var(--dark);
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+.menu-toggle:hover { background: #2f21b8; }
+.menu-toggle:focus-visible { outline: 3px solid #ffb3d1; outline-offset: -6px; }
+ 
+.menu-toggle__bar {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26px;
+  height: 3px;
+  margin: -1.5px 0 0 -13px;
+  border-radius: 2px;
+  background: #fff;
+  transition: transform .3s ease, opacity .2s ease;
+}
+.menu-toggle__bar:nth-child(1) { transform: translateY(-9px); }
+.menu-toggle__bar:nth-child(3) { transform: translateY(9px); }
+ 
+.menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(1) { transform: rotate(45deg); }
+.menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(2) { opacity: 0; }
+.menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(3) { transform: rotate(-45deg); }
+ 
 @media (max-width: 600px) {
   .site-header {
-    flex-direction: column;
-    gap: 8px;
+    flex-wrap: wrap;             
+    align-items: stretch;
+    padding: 0;
   }
+  .logo { align-self: center; padding: 16px 24px; }
+  .menu-toggle { display: block; }
+ 
   .menu {
+    flex: 0 0 100%;
     flex-direction: column;
-    align-items: center;
-    gap: 8px;
+    gap: 0;
+    background: #1f1f35;
+    max-height: 0;               
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;          
+    transform: translateY(-8px);
+    transition: max-height .35s ease, opacity .25s ease, transform .35s ease, visibility 0s linear .35s;
+  }
+  .menu a {
+    padding: 16px 24px;
+    font-size: 1.125rem;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+  }
+  .menu a:hover { background: rgba(255, 255, 255, .08); }
+ 
+  .menu.menu--open {             
+    max-height: 240px;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: max-height .35s ease, opacity .25s ease, transform .35s ease, visibility 0s;
   }
 }
-
+ 
 @media (prefers-reduced-motion: reduce) {
-  .card {
-    transition: none;
-  }
+  .card,
+  .menu,
+  .menu.menu--open,
+  .menu-toggle__bar { transition: none; }
 }
+ 
