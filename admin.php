@@ -1,25 +1,35 @@
-
 <?php
 require __DIR__ . '/auth.php';   // bez logowania odsyła do login.php
 require __DIR__ . '/baza.php';
 
 $blad = '';
 $nazwa = '';
-$cena = '';
-$akcja = $_SERVER['REQUEST_METHOD'] === 'POST' ? ($_POST['akcja'] ?? '') : '';
+$cenaWpisana = '';
+$popWpisana = '50';
+$akcja = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_sprawdz();                       // każdy formularz panelu ma token
+    $akcja = $_POST['akcja'] ?? '';
+}
 
 // --- akcja=dodaj ---
 if ($akcja === 'dodaj') {
-    $nazwa = trim($_POST['nazwa'] ?? '');
-    $cena  = filter_var($_POST['cena'] ?? '', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+    $nazwa       = trim($_POST['nazwa'] ?? '');
+    $cenaWpisana = (string) ($_POST['cena'] ?? '');
+    $popWpisana  = (string) ($_POST['popularnosc'] ?? '');
+    $cena = filter_var($cenaWpisana, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+    $pop  = filter_var($popWpisana, FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 100]]);
 
     if ($nazwa === '' || mb_strlen($nazwa) > 100) {
         $blad = 'Podaj nazwę usługi (maksymalnie 100 znaków).';
     } elseif ($cena === false) {
         $blad = 'Cena musi być liczbą całkowitą, minimum 1.';
+    } elseif ($pop === false) {
+        $blad = 'Popularność musi być liczbą od 0 do 100.';
     } else {
-        $z = $pdo->prepare('INSERT INTO uslugi (nazwa, cena) VALUES (:nazwa, :cena)');
-        $z->execute(['nazwa' => $nazwa, 'cena' => $cena]);
+        $z = $pdo->prepare('INSERT INTO uslugi (nazwa, cena, popularnosc) VALUES (:nazwa, :cena, :pop)');
+        $z->execute(['nazwa' => $nazwa, 'cena' => $cena, 'pop' => $pop]);
 
         $_SESSION['komunikat'] = 'Dodano usługę.';
         header('Location: admin.php');
@@ -39,11 +49,11 @@ if ($akcja === 'usun') {
     exit;
 }
 
-// komunikat po dodaniu lub usunięciu (pokazuje się raz)
+// komunikat po dodaniu, edycji lub usunięciu (pokazuje się raz)
 $komunikat = $_SESSION['komunikat'] ?? '';
 unset($_SESSION['komunikat']);
 
-$uslugi = $pdo->query('SELECT id, nazwa, cena FROM uslugi ORDER BY id')->fetchAll();
+$uslugi = $pdo->query('SELECT id, nazwa, cena, popularnosc FROM uslugi ORDER BY id')->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -86,6 +96,7 @@ $uslugi = $pdo->query('SELECT id, nazwa, cena FROM uslugi ORDER BY id')->fetchAl
                 <th scope="col">ID</th>
                 <th scope="col">Usługa</th>
                 <th scope="col" class="text-end">Cena</th>
+                <th scope="col" class="text-end">Popularność</th>
                 <th scope="col" class="text-end">Akcje</th>
               </tr>
             </thead>
@@ -95,9 +106,12 @@ $uslugi = $pdo->query('SELECT id, nazwa, cena FROM uslugi ORDER BY id')->fetchAl
                 <td><?= (int) $usluga['id'] ?></td>
                 <td><?= htmlspecialchars($usluga['nazwa']) ?></td>
                 <td class="text-end"><?= (int) $usluga['cena'] ?> zł</td>
-                <td class="text-end">
+                <td class="text-end"><?= (int) $usluga['popularnosc'] ?></td>
+                <td class="text-end text-nowrap">
+                  <a class="btn btn-sm btn-outline-secondary" href="edytuj.php?id=<?= (int) $usluga['id'] ?>">Edytuj</a>
                   <form method="post" class="d-inline"
                         onsubmit="return confirm('Na pewno usunąć tę usługę?');">
+                    <?= csrf_pole() ?>
                     <input type="hidden" name="akcja" value="usun">
                     <input type="hidden" name="id" value="<?= (int) $usluga['id'] ?>">
                     <button class="btn btn-sm btn-outline-danger">Usuń</button>
@@ -106,7 +120,7 @@ $uslugi = $pdo->query('SELECT id, nazwa, cena FROM uslugi ORDER BY id')->fetchAl
               </tr>
               <?php endforeach; ?>
               <?php if (!$uslugi): ?>
-              <tr><td colspan="4" class="text-center text-muted">Brak usług.</td></tr>
+              <tr><td colspan="5" class="text-center text-muted">Brak usług.</td></tr>
               <?php endif; ?>
             </tbody>
           </table>
@@ -119,6 +133,7 @@ $uslugi = $pdo->query('SELECT id, nazwa, cena FROM uslugi ORDER BY id')->fetchAl
           <div class="card-body">
             <h2 class="h5 mb-3">Dodaj usługę</h2>
             <form method="post">
+              <?= csrf_pole() ?>
               <input type="hidden" name="akcja" value="dodaj">
               <div class="mb-3">
                 <label for="nazwa" class="form-label">Nazwa</label>
@@ -128,7 +143,12 @@ $uslugi = $pdo->query('SELECT id, nazwa, cena FROM uslugi ORDER BY id')->fetchAl
               <div class="mb-3">
                 <label for="cena" class="form-label">Cena (zł)</label>
                 <input id="cena" name="cena" type="number" min="1" class="form-control" required
-                       value="<?= htmlspecialchars((string) ($cena === false ? '' : $cena)) ?>">
+                       value="<?= htmlspecialchars($cenaWpisana) ?>">
+              </div>
+              <div class="mb-3">
+                <label for="popularnosc" class="form-label">Popularność (0–100)</label>
+                <input id="popularnosc" name="popularnosc" type="number" min="0" max="100" class="form-control" required
+                       value="<?= htmlspecialchars($popWpisana) ?>">
               </div>
               <button class="btn btn-primary">Dodaj</button>
             </form>

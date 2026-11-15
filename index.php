@@ -1,12 +1,17 @@
+
 <?php
 require __DIR__ . '/baza.php';
 
-// Cennik z bazy (tabela uslugi, tworzy ją setup.php). Klucze 'nazwa' i 'cena'
-// są takie same jak wcześniej w tablicy, więc tabela i wykres działają bez zmian.
+// Filtr ceny z adresu, np. index.php?max=100 (bez parametru pokazuje wszystko)
+$max = filter_var($_GET['max'] ?? '', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+
+// Cennik z bazy (tabelę uslugi tworzy setup.php)
 try {
-    $cennik = $pdo->query('SELECT nazwa, cena FROM uslugi ORDER BY id')->fetchAll();
+    $z = $pdo->prepare('SELECT nazwa, cena, popularnosc FROM uslugi WHERE cena <= :max ORDER BY id');
+    $z->execute(['max' => $max === false ? PHP_INT_MAX : $max]);
+    $cennik = $z->fetchAll();
 } catch (PDOException $e) {
-    $cennik = [];   // baza jeszcze nie utworzona: uruchom php setup.php
+    $cennik = [];   // baza jeszcze nie utworzona lub bez kolumny popularnosc: uruchom php setup.php
 }
 
 // Bonus: powitanie z adresu, np. index.php?imie=Ola
@@ -16,7 +21,7 @@ $imie = (isset($_GET['imie']) && is_string($_GET['imie']) && trim($_GET['imie'])
 
 // Bonus: wymiary wykresu SVG liczone z tej samej tablicy co cennik
 $wiersz = 52;                                       // wysokość jednego wiersza wykresu
-$maks   = max(array_column($cennik, 'cena'));       // najwyższa cena = najdłuższy słupek
+$maks   = $cennik ? max(1, max(array_column($cennik, 'popularnosc'))) : 1;   // najpopularniejsza usługa = najdłuższy słupek
 $wys    = count($cennik) * $wiersz;
 ?>
 <!DOCTYPE html>
@@ -147,6 +152,18 @@ $wys    = count($cennik) * $wiersz;
 
     <section id="cennik">
       <h2>Cennik</h2>
+      <form class="filter" method="get" action="index.php#cennik">
+        <?php if (isset($_GET['imie']) && is_string($_GET['imie'])): ?>
+        <input type="hidden" name="imie" value="<?= htmlspecialchars($_GET['imie']) ?>">
+        <?php endif; ?>
+        <div>
+          <label for="max">Maksymalna cena (zł)</label>
+          <input id="max" name="max" type="number" min="1" value="<?= $max === false ? '' : (int) $max ?>">
+        </div>
+        <button class="btn" type="submit">Filtruj</button>
+        <?php if ($max !== false): ?><a href="index.php#cennik">Wyczyść filtr</a><?php endif; ?>
+      </form>
+
       <table class="price-table">
         <caption class="visually-hidden">Cennik usług serwisowych</caption>
         <thead>
@@ -159,21 +176,26 @@ $wys    = count($cennik) * $wiersz;
             <td class="num"><?= $usluga['cena'] ?> zł</td>
           </tr>
           <?php endforeach; ?>
+          <?php if (!$cennik): ?>
+          <tr><td colspan="2"><?= $max !== false ? 'Brak usług w tej cenie.' : 'Cennik jest chwilowo niedostępny.' ?></td></tr>
+          <?php endif; ?>
         </tbody>
       </table>
 
-      <h3 class="chart-title">Porównanie cen</h3>
+      <?php if ($cennik): ?>
+      <h3 class="chart-title">Popularność usług</h3>
       <svg class="chart" viewBox="0 0 400 <?= $wys ?>" role="img" aria-labelledby="wykres-tytul">
-        <title id="wykres-tytul">Wykres słupkowy cen usług</title>
+        <title id="wykres-tytul">Wykres słupkowy popularności usług</title>
         <?php foreach ($cennik as $i => $usluga):
           $y    = $i * $wiersz;
-          $szer = max(4, round(300 * $usluga['cena'] / $maks));
+          $szer = max(4, round(300 * $usluga['popularnosc'] / $maks));
         ?>
         <text class="chart__label" x="0" y="<?= $y + 18 ?>"><?= htmlspecialchars($usluga['nazwa']) ?></text>
         <rect class="chart__bar" x="0" y="<?= $y + 26 ?>" width="<?= $szer ?>" height="16" rx="3"/>
-        <text class="chart__value" x="<?= $szer + 8 ?>" y="<?= $y + 39 ?>"><?= $usluga['cena'] ?> zł</text>
+        <text class="chart__value" x="<?= $szer + 8 ?>" y="<?= $y + 39 ?>"><?= (int) $usluga['popularnosc'] ?></text>
         <?php endforeach; ?>
       </svg>
+      <?php endif; ?>
     </section>
   </main>
 

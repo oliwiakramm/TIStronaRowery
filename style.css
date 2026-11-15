@@ -333,3 +333,19 @@ footer a:hover { color: #fff; }
   .btn,
   .btn-contact { transition: none; }
 }
+
+/* ---------- Filtr ceny ---------- */
+.filter { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin-bottom: 16px; }
+.filter label { display: block; margin-bottom: 4px; font-weight: 600; }
+.filter input {
+  width: 160px;
+  padding: 10px 12px;
+  border: 1px solid #b9ad9f;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+}
+.filter input:focus-visible { outline: 3px solid var(--accent-hover); outline-offset: 2px; }
+.filter .btn { padding: 11px 24px; border: 0; font: inherit; font-weight: 600; cursor: pointer; }
+.filter a { align-self: center; }
