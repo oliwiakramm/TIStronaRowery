@@ -333,3 +333,51 @@ footer a:hover { color: #fff; }
   .btn,
   .btn-contact { transition: none; }
 }
+
+
+
+/* ---------- Logowanie i panel admina ---------- */
+.panel {
+  max-width: 420px;
+  margin: 64px auto;
+  padding: 32px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.panel h1 { margin: 0 0 24px; font-size: 1.75rem; }
+
+.form { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+.form label { font-weight: 600; }
+.form input {
+  padding: 12px 14px;
+  border: 1px solid #b9ad9f;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+}
+.form input:focus-visible { outline: 3px solid var(--accent-hover); outline-offset: 2px; }
+.form .btn { margin-top: 12px; border: 0; font: inherit; font-weight: 600; cursor: pointer; }
+
+.form-error {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #fbe9e7;
+  color: #8a1c13;
+  font-weight: 600;
+}
+
+/* ---------- Panel admina: lista i dodawanie ---------- */
+.panel--wide { max-width: 720px; }
+.panel h2 { margin: 32px 0 16px; font-size: 1.35rem; }
+.panel .price-table { margin-bottom: 8px; }
+.flash {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: #e8f3e8;
+  color: #1f4a22;
+  font-weight: 600;
+}
