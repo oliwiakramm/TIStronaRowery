@@ -1,12 +1,13 @@
 <?php
-// Cennik usług: dodaj kolejny wiersz do tablicy, a pojawi się w tabeli na stronie
-$cennik = [
-    ['nazwa' => 'Przegląd',               'cena' => 120],
-    ['nazwa' => 'Przegląd generalny',     'cena' => 250],
-    ['nazwa' => 'Wymiana opony lub dętki', 'cena' => 40],
-    ['nazwa' => 'Centrowanie koła',       'cena' => 60],
-    ['nazwa' => 'Wymiana łańcucha',       'cena' => 50],
-];
+require __DIR__ . '/baza.php';
+
+// Cennik z bazy (tabela uslugi, tworzy ją setup.php). Klucze 'nazwa' i 'cena'
+// są takie same jak wcześniej w tablicy, więc tabela i wykres działają bez zmian.
+try {
+    $cennik = $pdo->query('SELECT nazwa, cena FROM uslugi ORDER BY id')->fetchAll();
+} catch (PDOException $e) {
+    $cennik = [];   // baza jeszcze nie utworzona: uruchom php setup.php
+}
 
 // Bonus: powitanie z adresu, np. index.php?imie=Ola
 $imie = (isset($_GET['imie']) && is_string($_GET['imie']) && trim($_GET['imie']) !== '')
